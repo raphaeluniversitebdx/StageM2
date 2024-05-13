@@ -43,13 +43,10 @@ def verify_array(labels):
     Convert labels to numpy array
     '''
     if not isinstance(labels, np.ndarray):
-
         if isinstance(labels,list):
             labels = np.array(labels)
-
         if isinstance(labels, da.core.Array):
             labels = labels.compute()
-
     return labels
 
 
@@ -58,17 +55,13 @@ def get_cells_numbers_on_all_frames(labels):
     Return a percentage and a list of cells present in all frames 
     '''
     labels = verify_array(labels)
-    get_cells_number(labels) 
+    get_cells_number(labels)
     nb_max = count_cells(labels)
     frame_cell_list=[]
-    
-    
     # get lists of all labels for each frames 
     for label in labels : 
         cell_list=np.unique(label)
-        
         frame_cell_list.append(cell_list)
-
     # get list of frames 0
     frame_0 = frame_cell_list[0]
 
@@ -84,6 +77,8 @@ def get_cells_numbers_on_all_frames(labels):
 def delete_cells(labels,cell):
     '''
     Delete cell from all frames 
+    labels : list of labels for all cell
+    cell : number of the cell 
     '''
     res = []
     labels = verify_array(labels)
@@ -97,7 +92,7 @@ def delete_cells(labels,cell):
     print("cell ",cell, "has been deleted on all frames")
     return res 
 
-def extends_cells(labels,cellpose,cellNumber,applyNUmber,minLen): # retravailler cette fonction pour eviter de manipuler d'autre cellules --> utiliser les coordonnees x,y 
+def extends_cells(labels,cellpose,cellNumber,applyNumber,minLen): # retravailler cette fonction pour eviter de manipuler d'autre cellules --> utiliser les coordonnees x,y 
     '''
     The goal of this function is to use cellpose label to draw 
     '''
@@ -112,11 +107,11 @@ def extends_cells(labels,cellpose,cellNumber,applyNUmber,minLen): # retravailler
                     if cellpose[z][y][x]==cellNumber :
                         if labels[z][y][x]==0:
                             
-                            labels[z][y][x]=applyNUmber
+                            labels[z][y][x]=applyNumber
             res.append(labels[z])
             time.sleep(0.1)
             bar()
-        print("Cell ", applyNUmber, " has been drawed" )
+        print("Cell ", applyNumber, " has been drawed" )
     return res
 
 def merge_neighboor_cells(parent_cell, child_cell,labels):

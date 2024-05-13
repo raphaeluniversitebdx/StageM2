@@ -52,10 +52,21 @@ def get_cells_from_3D_stack_v2(stacks,labels,cellNumber):
     #print("Done for cell ", cellNumber)
     return res 
 
-def crop_cells(labels):
-    
+
+def generate_background(movie_frame, background_signal):
+    '''This function generate background for cells image according to a list of background signals 
     '''
-    This function allow to crop an stack of shape t,z,y,x in a smaller with all the cells in it '''
+    res =[]
+    movie_frame=verify_array(movie_frame)
+    res=np.where(movie_frame==0, np.array(background_signal),movie_frame)
+
+    return res 
+
+    
+def crop_cells(labels):
+    '''
+    This function allow to crop an stack of shape t,z,y,x in a smaller with all the cells in it 
+    '''
     cropped = []
     
     labels=verify_array(labels)
@@ -76,7 +87,8 @@ def crop_cells(labels):
 def crop_cells_v2(img,labels, cellNumber):
     
     '''
-    This function allow to crop an stack of shape t,z,y,x in a smaller with all the cells in it '''
+    This function allow to crop an stack of shape t,z,y,x in a smaller with all the cells in it 
+    '''
     cropped = []
     
     img=verify_array(img)
@@ -114,6 +126,24 @@ def crop_cells_v3(labels):
         #return None 
     return cropped 
 
+
+def crop_cells_with_background(img,labels, cellNumber):
+    
+    '''
+    This function allow to crop an stack of shape t,z,y,x in a smaller with all the cells in it 
+    '''
+    img=verify_array(img)
+    labels=verify_array(labels)
+    
+    min_y = np.min([np.min(np.where(label==cellNumber)[1]) for label in labels])
+    max_y = np.max([np.max(np.where(label==cellNumber)[1]) for label in labels])
+    min_x = np.min([np.min(np.where(label==cellNumber)[2]) for label in labels])
+    max_x = np.max([np.max(np.where(label==cellNumber)[2]) for label in labels])
+
+    #print(min_y,max_y,  min_x,max_x)
+    cropped_img = img[:, :, min_y:max_y+1, min_x:max_x+1]
+    cropped_mask = labels[:, :, min_y:max_y+1, min_x:max_x+1]
+    return cropped_img, cropped_mask
 
 def save_cells(img, folder, nameKey, imsQ,keyword, cellNumber=''):
     '''
