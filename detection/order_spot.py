@@ -1,29 +1,84 @@
 from alive_progress import alive_bar
-import time
-import numpy as np 
+from datetime import datetime
 from copy import deepcopy 
-def order_clusters_frames(clustersFrames,mipSequenceCell,threshold ):
+import numpy as np 
+import time
+import csv 
+import os 
 
+def sort_spot_list(spot_list,mipSequenceCell,distance=2):
+    '''
+    The goal of this function is to sort spot which are on the side of a cell to improve the computing of the reference spot
+    spot_list : numpy array corresponding to a numpy array of spots through the whole movie
+    mipSequenceCell : 2D projection of the movie
+    '''
+    
+    res=[]
+    i=0
+    count=0
+    for spot_frame in spot_list : 
+        tmp=[]
+        
+        for spot in spot_frame: 
+            
+            z=spot[0]
+            y=spot[1]
+            x=spot[2]
+            
+            #negative 
+            test_y_n=y-distance
+            test_x_n=x-distance
+            #positive
+            test_y_p=y+distance
+            test_x_p=x+distance
+            #test coordinate of spots to verify if they are at the border of a cell 
+            test_mip_1=np.array(mipSequenceCell[i][test_y_n][test_x_n])
+            test_mip_2=np.array(mipSequenceCell[i][test_y_p][test_x_p])
+            test_mip_3=np.array(mipSequenceCell[i][test_y_n][test_x_p])
+            test_mip_4=np.array(mipSequenceCell[i][test_y_p][test_x_n])
+            
+            
+            if test_mip_1==0 or test_mip_2==0  or test_mip_3==0  or test_mip_4 ==0 :
+                count=count+1
+            else : 
+                tmp.append(spot)
+        # if there is no spots
+        if len(tmp)==0:
+            tmp=np.empty((0,3))
+            res.append(tmp)
+                    
+        res.append(np.array(tmp))
+        i=i+1
+    
+    
+    print('eliminated spots :', count)
+    return res
+
+def order_clusters_frames(clustersFrames,mipSequenceCell,threshold ):
+    '''
+    The goal of this function is to order the clusters frames by the intensity of the corresponding pixels
+
+    clustersFrames : coordinate of the clusters throughout the movie
+    mipSequenceCell : 2D projection of the movie
+    threshold : a specific value below which the a specific value for a candidate clusters will be eliminated  
+    '''
     res = []
     with alive_bar(len(clustersFrames), title = "order cluster frame",force_tty=True) as bar :
         for i in range(len(clustersFrames)):
-            #print('clustersFrames', i)
             frame = clustersFrames[i]
             tmp =[]
             id = 0
             for j in range(len(frame)):
                 y_coord = frame[j][1]
                 x_coord = frame[j][2]
-
+                #test value of pixel of the image
                 test = np.array(mipSequenceCell[i][y_coord:y_coord+1,x_coord:x_coord+1])
                 val = test[0][0]
                 if val < threshold : 
                     print(i,val)
                 tmp.append(val)
-
             try :
-                # possibilite de rajouter une condition 
-                # pour filtrer les sites de transcription uniquement en rajoutant un threshold de 1000
+                # test if there is no value in tmp > threshold
                 if max(tmp) < threshold :
                     res.append([np.zeros(5)])
                 else :
@@ -39,12 +94,10 @@ def order_clusters_frames(clustersFrames,mipSequenceCell,threshold ):
         
     
         return res 
-    
 
 def compare_array(array,array_list):
     '''
     This function compare an array with an array list 
-
     '''
     res=[]
     for a in array_list : 
@@ -53,10 +106,10 @@ def compare_array(array,array_list):
         res.append(cr)
         
     return res 
-    
 
 def sort_clustersFrames(clustersFrames,mipSequenceCell,threshold,perc=1):
-    '''This function sort a list of numpy array according to a threshold corresponding to the intensity of the mipSequenceCell's pixels 
+    '''
+    This function sort a list of numpy array according to a threshold corresponding to the intensity of the mipSequenceCell's pixels 
     '''
 
     clustersFrames_cp = deepcopy(clustersFrames)
@@ -103,7 +156,7 @@ def sort_clustersFrames(clustersFrames,mipSequenceCell,threshold,perc=1):
                         #print('after \n ', frames)
                     res.append(tmp_res)
             except ValueError as e : 
-                print(i, tmp, test)
+                #print(i, tmp, test)
                 print(e)
                 res.append([np.zeros(5)])
             time.sleep(0.1)
@@ -113,25 +166,44 @@ def sort_clustersFrames(clustersFrames,mipSequenceCell,threshold,perc=1):
 
 
 
-
-def merge_clusters_frame(res,diff):
+def merge_clusters_frame(res,mipSequenceCell,diffxy,diffz,perc=0.5):
     '''
     This function compute coordinate of clusters Frame with the compatible neighboor to get a better quantification 
+
+
+    res : an array corresponding to a list of sorted clusters with the clusters[0] always corresponding to the most intense pixel 
+    mipSequenceCell : a 2D image of a cell
+    diffxy : a radius in pixel
+    perc : percentage of tolerance of intensity for perc=0.5 an the most intense pixel = 2000, the tolerance will be from a range of -1000 to 1000
     '''
+
+    # prendre en compte 
     res2 = deepcopy(res)
     p = 0
+    i=0
     new_clusters_frames = []
+    
     for frames in res2 :
         tc = frames[0]
         tmp = [tc]
+        
+        threshold = np.array(mipSequenceCell[i][tc[1]][tc[2]])*perc
+        #print(i, threshold)
         for cluster in frames[1:]:
+            # define tests in 3 dimensions
             test_z = tc[0] - cluster[0]
             test_y = tc[1] - cluster[1]
             test_x = tc[2] - cluster[2]
 
-            if -diff <=test_y <= diff and -diff <=test_x <= diff and -diff <= test_z <= diff :
-                # print('frame :', p,'y :',test_y,'x :',test_x)
-                tmp.append(cluster)
+            # define test on intensity 
+            test_array_a = np.array(mipSequenceCell[i][cluster[1]][cluster[2]])
+            test_array_b =  np.array(mipSequenceCell[i][tc[1]][tc[2]])
+            test_array =  int(test_array_a) - int(test_array_b) 
+
+            if -diffxy <=test_y <= diffxy and -diffxy <=test_x <= diffxy and -diffz <= test_z <= diffz :
+                if -threshold <= test_array <= +threshold : 
+                    tmp.append(cluster)
+                    
         
         for t in tmp[1:] :
             #average the coordinate of the clusters 
@@ -139,14 +211,11 @@ def merge_clusters_frame(res,diff):
             tc[1] = (tc[1]+t[1])/2
             tc[2] = (tc[2]+t[2])/2
 
-            # sum of the molecule 
+            # sum of the molecules 
             tc[3] = tc[3] + t[3]
-            
+        i=i+1
         new_clusters_frames.append([tc])
-        p = p+1
-        
     return new_clusters_frames
-
 
 def get_all_clusters(images,threshold,size):
     '''
@@ -178,7 +247,7 @@ def move_sorted_clustersFrames(liste, elem_to_move, new_position):
 
     return liste 
 
-def create_index2(clustersFrames):
+def create_index(clustersFrames):
     index = 0
     res=[]
     for frame in clustersFrames : 
@@ -190,3 +259,25 @@ def create_index2(clustersFrames):
         index = index + 1 
         
     return res
+
+
+def save_csv_file(homeFolder,nameKey,imsQ,cellNumber,selectedThreshold,alpha,beta,gamma,c):
+    b = np.concatenate(c)
+    entete = ['z','y','x','n_molecule','minute']
+    date = datetime.today().strftime('%Y_%m_%d')
+    
+    savepath_subfolder = date + '_' + nameKey + imsQ +  '/'
+    savepath_folder = homeFolder+nameKey+imsQ + '/' + savepath_subfolder
+    savepath_name_file = nameKey + imsQ + '_TS' +'_cell_' + cellNumber
+    savepath_param = '_bleach_correction_sort_ref_spots'+  str(alpha) +'_' + str(beta) + '_' + str(gamma) + '_thres_' + str(selectedThreshold)
+    savepath = savepath_folder + savepath_name_file + savepath_param +  '.csv'  
+    
+    if not os.path.exists(savepath_folder):
+        os.makedirs(savepath_folder)
+    
+    with open(savepath, 'w', newline='') as csv_file :
+        writer = csv.writer(csv_file)
+        writer.writerow(entete)
+        writer.writerows(b)
+    
+    print('saved on ', savepath)
