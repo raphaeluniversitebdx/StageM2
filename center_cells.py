@@ -49,61 +49,39 @@ def compute_avg_centroid(centroid_list):
 
 
 
-def center_a_cell(cell):
+
+def center_image_for_z(images,labels,cellNumber):
     '''
-    This function use the above function and other operations to compute a whole cell 
+    This function compute a list of centroid for each frames in a hyperstack of shape [t,z,y,x] 
+    Then use it to compute a list of centroid mean for each frames in t 
+    Then compute an average mean throughout the movie 
+    And use it to move the image of the hyperstack by computing offsets between the average mean and the centroid list for the hyperstack
+    
+    ________________________
+    
+    This function return the centered images and the masks as numpy array
+    
     '''
-    HS_centroid_list = get_centroid(cell)
+    res_images=[]
+    res_labels=[]
+    
+    HS_centroid_list = get_centroid(images,labels,cellNumber)
     HS_centroid_mean = compute_avg_centroid(HS_centroid_list)
     avg_mean = np.mean(HS_centroid_mean,axis=0)
-
-    offsets = [avg_mean - ctr for ctr in HS_centroid_mean]
-    ctr_stacks = [np.roll(img, (int(offset[1]), int(offset[0])), axis=(0,1)) for img, offset in zip(cell,offsets )]
-    ctr_stacks = np.array(ctr_stacks)
-
-    return ctr_stacks 
-
-
-def get_centroid_labels(img,labels,cellNumber):
-    '''
-    For an hyperstack of shape (t,z,y,x) this function return the centroid of each image 
-    '''
-    img = verify_array(img)
-    labels = verify_array(labels)
+    offsets = [avg_mean - ctr for ctr in HS_centroid_list] #3d list of centroid for 1 frame in t
+    for t in range(0,len(images)): 
+        
+        tmp_image = [np.roll(img,(int(offset[0]), int(offset[1])), axis=(0,1)) for img, offset in zip(images[t],offsets[t])]
+        tmp_label = [np.roll(img,(int(offset[0]), int(offset[1])), axis=(0,1)) for img, offset in zip(labels[t],offsets[t])]
+        
+        res_images.append(tmp_image)
+        res_labels.append(tmp_label)
     
-    res2=[]
-    for t in range(0,len(img)) :
-        res=[]
-        for z in img[t] : 
-            tmp=[]
-            cy, cx = ndi.center_of_mass(z,labels[t],cellNumber)
-            tmp.append(cy)
-            tmp.append(cx)
-
-            res.append(tmp) # get a list of z centroids for a frame in t | example if z = 36 len(res)=36
-        res2.append(res) # get a list of t centroids for t | example if t = 123 len(res2)=123
-    res2 = np.array(res2)
-    return res2
-
-
-def center_a_cell_with_labels(cells,labels,cellNumber):
-    '''
-    This function use the above function and other operations to compute a whole cell 
-    '''
-    HS_centroid_list = get_centroid(cells,labels,cellNumber)
-    HS_centroid_mean = compute_avg_centroid(HS_centroid_list)
-
-    del HS_centroid_list 
-
-    avg_mean = np.mean(HS_centroid_mean,axis=0)
-    offsets = [avg_mean - ctr for ctr in HS_centroid_mean]
-
-    del HS_centroid_mean 
+    res_images = np.array(res_images)
+    res_labels = np.array(res_labels)
     
-    ctr_stacks = [np.roll(img, (int(offset[1]), int(offset[0])), axis=(0,1)) for img, offset in zip(cells,offsets )]
-    ctr_stacks = np.array(ctr_stacks)
+    return res_images, res_labels
     
-    ctr_masks = [np.roll(img, (int(offset[1]), int(offset[0])), axis=(0,1)) for img, offset in zip(labels,offsets )]
-    ctr_masks = np.array(ctr_masks)
 
-    return ctr_stacks, ctr_masks
+
+
