@@ -205,7 +205,7 @@ def getSpotAndClusters_multi(pathTocellCrops,reference_spot,multi_list, cellnumb
             reference_spot_previous=reference_spot*multi_list[ind_list], 
             voxel_size=voxelSize, 
             spot_radius=objectSize, 
-           # alpha=alpha,  # alpha impacts the number of spots per candidate region
+            # alpha=alpha,  # alpha impacts the number of spots per candidate region
             beta=beta,  # beta impacts the number of candidate regions to decompose
             gamma=gamma)  # gamma the filtering step to denoise the image
         reference_spot_previous = deepcopy(reference_spot_current)

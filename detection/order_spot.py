@@ -5,6 +5,20 @@ import numpy as np
 import time
 import csv 
 import os 
+import sys 
+
+import sys
+import os
+
+# Ajoutez le répertoire parent au sys.path
+chemin_du_repertoire_parent = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if chemin_du_repertoire_parent not in sys.path:
+    sys.path.append(chemin_du_repertoire_parent)
+
+# Maintenant, vous pouvez importer le module
+from follow_cells import *
+
+
 
 def sort_spot_list(spot_list,mipSequenceCell,distance=2):
     '''
@@ -281,3 +295,45 @@ def save_csv_file(homeFolder,nameKey,imsQ,cellNumber,selectedThreshold,alpha,bet
         writer.writerows(b)
     
     print('saved on ', savepath)
+
+
+
+def sort_spot_list_mask(spot_list,mipSequenceCell,mask,cellNumber):
+    '''
+    The goal of this function is to sort spot which are on the side of a cell to improve the computing of the reference spot
+    spot_list : numpy array corresponding to a numpy array of spots through the whole movie
+    mipSequenceCell : 2D projection of the movie
+    '''
+
+    test_cell = get_cells(mipSequenceCell,mask,int(cellNumber))
+    res=[]
+    i=0
+    count=0
+    for spot_frame in spot_list : 
+        tmp=[]
+        
+        for spot in spot_frame: 
+            
+            z=spot[0]
+            y=spot[1]
+            x=spot[2]
+            
+            #test_cell = np.max(test_cell, axis=1)
+            
+          
+            if test_cell[i][y][x]!=0 : 
+                tmp.append(spot)
+            else : 
+                count=count+1
+            
+        # if there is no spots
+        if len(tmp)==0:
+            tmp=np.empty((0,3))
+            res.append(tmp)
+                    
+        res.append(np.array(tmp))
+        i=i+1
+    
+    
+    print('eliminated spots :', count)
+    return res

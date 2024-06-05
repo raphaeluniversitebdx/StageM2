@@ -179,6 +179,8 @@ def buildReferenceSpotFromImages(images, spots_list, alpha, gamma,voxelSize=(600
     
     print("Found "+str(len(l_reference_spot))+" spots, max intensity = "+str((np.max(reference_spot))))
     
-    return reference_spot
+    spots_found = int(len(l_reference_spot))
+    max_intensity = int(np.max(reference_spot))
+    return reference_spot, spots_found, max_intensity
     
     
