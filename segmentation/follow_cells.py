@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+@author: rtranchot
+"""
+
+
+
 import copy
 from correct_cells import verify_array 
 from alive_progress import alive_bar
