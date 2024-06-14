@@ -27,8 +27,8 @@ each environment has it own yml file.
 
 ### Description of the pipeline 
 The pipeline consist of the following steps :
-- segmentation of cells
-- tracking of the cells
+1) segmentation of cells
+2) tracking of the cells
 - cropping and centering
 
 - get threshold
