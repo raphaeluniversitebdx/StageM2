@@ -27,11 +27,13 @@ each environment has it own yml file.
 
 ### Description of the pipeline 
 The pipeline consist of the following steps :
-1) segmentation of cells
-2) tracking of the cells
-- cropping and centering
+1. [segmentation of cells](#segmentation)
+2. [tracking of the cells](#tracking)
+3. [cropping and centering](#cropping)
 
-- get threshold
-- Build Reference spot
-- Quantification of the clusters 
+4. [get threshold](#threshold)
+5. [Build Reference spot](#refspot)
+6. [Quantification of the clusters](#quantification)
+
+#### Segmentation
 
