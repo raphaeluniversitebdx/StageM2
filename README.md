@@ -41,5 +41,5 @@ This operations is realised by using the pre-trained model of Cellpose.
 
 #### Tracking
 This step consist to assign for each cells detected during segmentation an unique label throughout the movie. 
-The tracking is done by using [https://github.com/royerlab/ultrack/tree/main](Ultrack). 
+The tracking is done by using [Ultrack](https://github.com/royerlab/ultrack/tree/main). 
 
