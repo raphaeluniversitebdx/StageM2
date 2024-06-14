@@ -18,12 +18,21 @@ Clone the project's [Github repository](https://github.com/raphaeluniversitebdx/
 ```
 git clone https://github.com/raphaeluniversitebdx/StageM2.git
 ```
+To avoid dependency conflicts, we recommend to use [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). 
 
 You need to create 2 distincts Anaconda environments : 
 - segmentation
 - detection 
 
 each environment has it own yml file in their respective folders. 
+
+In a terminal run :
+```
+conda env create -f environment_detection.yml
+conda env create -f environment_segmentation.yml
+
+conda activate name/of/the/environment 
+```
 
 ## Usage
 
@@ -59,5 +68,8 @@ See the associated documentation for more details.
 
 In the case of the quantification of large clusters, additionnal operations will be done to get the most accurate results. 
 
+## Contributing 
+
+[Pull requests](https://github.com/raphaeluniversitebdx/StageM2/pulls) are welcome. For major changes, please open an [issue](https://github.com/raphaeluniversitebdx/StageM2/issues) first to discuss what you would like to change.
 
 
