@@ -1,10 +1,8 @@
-# StageM2
+# StageM2 
 
-### retirer les notebooks inutiles et réorganiser en deux dossiers,  segmentation et détection 
 ## Descriptions 
 This package is used to detect and quantify spots in live cells. 
 It use BigFish and BigFish live to quantify single molecules and clusters in live movies. 
-
 
 ## Table of Contents 
 1. [Installation](#installation)
