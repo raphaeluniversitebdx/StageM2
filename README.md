@@ -36,4 +36,10 @@ The pipeline consist of the following steps :
 6. [Quantification of the clusters](#quantification)
 
 #### Segmentation
+This step consist to detect the outlines of the cells present in the movies. 
+This operations is realised by using the pre-trained model of Cellpose. 
+
+#### Tracking
+This step consist to assign for each cells detected during segmentation an unique label throughout the movie. 
+The tracking is done by using [https://github.com/royerlab/ultrack/tree/main](Ultrack). 
 
