@@ -13,15 +13,14 @@ It use BigFish and BigFish live to quantify single molecules and clusters in liv
 4. [License](#license)
 
 ## Installation 
-
-To download this package use the following command : 
-git clone https://github.com/raphaeluniversitebdx/StageM2.git
+Clone the project's [Github repository](https://github.com/raphaeluniversitebdx/StageM2.git) with the following command : 
+`git clone https://github.com/raphaeluniversitebdx/StageM2.git`
 
 You need to create 2 distincts Anaconda environments : 
 - segmentation
 - detection 
 
-each environment has it own yml file. 
+each environment has it own yml file in their respective folders. 
 
 ## Usage
 
