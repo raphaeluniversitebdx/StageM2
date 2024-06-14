@@ -3,9 +3,9 @@
 ## Description
 This package is used to detect and quantify spots in live cells. 
 It use BigFish and BigFish live to quantify single molecules and clusters in live movies. 
-| Cell image (smFISH channel) |
+| Cell image (smFISH channel) before and after detection |
 |------------- |
-| ![](image_readme/img_readme1.PNG "Image of a cell before and after detection") |
+| ![](image_readme/img_readme1.PNG "Transcription site in the red square and single molecules of RNA in white circle ") |
 ## Table of Contents 
 1. [Installation](#installation)
 2. [Usage](#usage)
