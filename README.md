@@ -38,36 +38,47 @@ conda activate name/of/the/environment
 
 ### Description of the pipeline 
 The pipeline consist of the following steps :
-1. [segmentation of cells](#segmentation)
-2. [tracking of the cells](#tracking)
-3. [Centering and Cropping of the cells](#cropping)
+1. [Segmentation of cells](#segmentation)
+2. [Tracking of the cells](#tracking)
+3. [Correction of the cells](#correction)
+4. [Centering and Cropping of the cells](#cropping)
 
-4. [get threshold](#threshold)
-5. [Build Reference spot](#refspot)
-6. [Quantification of the clusters](#quantification)
+5. [Get threshold](#threshold)
+6. [Build Reference spot](#refspot)
+7. [Quantification of the clusters](#quantification)
 
 ### Segmentation
-#### Segmentation
+#### Segmentation (1_Segmentation_and_Tracking_Full_Version.ipynb / 1_Segmentation_Short_Version.ipynb)
 This step consist to detect the outlines of the cells present in the movies. 
 This operations is realised by using the pre-trained model of [Cellpose](https://github.com/mouseland/cellpose). 
 
-#### Tracking
+#### Tracking (1_Segmentation_and_Tracking_Full_Version.ipynb / 1.5_Tracking_Short_Version.ipynb)
 This step consist to assign for each cells detected during segmentation an unique label throughout the movie. 
 The tracking is done by using [Ultrack](https://github.com/royerlab/ultrack/tree/main). 
 
-#### Centering and cropping of the cells 
+#### Correction (2_Cell_Correction.ipynb)
+Correction of the tracking mask. 
+You can either do that manually in napari or use a few fonction to do a semi-automated correction. 
+
+
+#### Centering and cropping of the cells (3_Follow_a_specific_cell.ipynb)
 When the tracking is done, you need to crop the cells to get individual movies for each tracked cells. 
 First we will center each cell throughout the movie and when it's done we will crop them. 
+This method ensures we get the smaller files possible. 
 
 ### Detection and Quantification
 
-The following step will mainly use [BigFish](https://github.com/fish-quant/big-fish) and [BigFishLive](https://github.com/rachel-kt/bigFishLive/tree/main). 
+The following step will mainly use [BigFish](https://github.com/fish-quant/big-fish) and [BigFishLive](https://github.com/rachel-kt/bigFishLive/tree/main).  
 See the associated documentation for more details. 
 
-#### Quantification 
+#### Threshold (4_getThreshold&Spots.ipynb)
+This notebook will realize the detection of the intensity threshold for the spots and clusters. 
 
+#### Quantification (5_buildReferenceSpot&Quantification.ipynb)
+This notebook will use the threshold computed to detect spot and clusters by using a reference spot computed for each cells. 
 In the case of the quantification of large clusters, additionnal operations will be done to get the most accurate results. 
-
+These operations consist to detect the neighbors of clusters and make the sum of them by using criterion of intensity and proximity. 
+Two radius in xy and z, and a percentage of tolerance will be needed. 
 ## Contributing 
 
 [Pull requests](https://github.com/raphaeluniversitebdx/StageM2/pulls) are welcome. For major changes, please open an [issue](https://github.com/raphaeluniversitebdx/StageM2/issues) first to discuss what you would like to change.
