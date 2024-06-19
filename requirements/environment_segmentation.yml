@@ -15,6 +15,7 @@ dependencies:
   - pip:
     - pyqt5
     - napari
+    - jupyter nbconvert
     - stardist
     - csbdeep
     - opencv
