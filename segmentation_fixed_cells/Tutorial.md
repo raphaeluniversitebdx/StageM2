@@ -24,3 +24,7 @@ The notebook [segment-nuclei](https://github.com/fish-quant/fq-segmentation/blob
 ## Creation of the outline in matlab
 The creation of the outline will be done by using [FISH-QUANT).
 
+| Cell Profiler of FISH-QUANT |
+|------------- |
+| ![](image_tuto/parametre_CP.png "Example of parameters for Cell Profiler in FISH-QUANT")|
+
