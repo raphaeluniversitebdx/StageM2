@@ -31,8 +31,8 @@ The creation of the outline will be done by using [FISH-QUANT).
 Identifiers : 
 1. for DAPI images : w3SPI-488
 2. for FISH images : w1SPI-642
-3. for nuclei segmentation : __mask__('nuclei',)
-4. for cell segmentation : __mask_resize__('nuclei',)
+3. for nuclei segmentation : \_\_mask_\_('nuclei',)
+4. for cell segmentation : \_\_mask\_resize_\_('nuclei',)
 
 ## Rename the outline.txt files
 When the outlines are done you need to rename the outline.txt file and change the line 4. 
