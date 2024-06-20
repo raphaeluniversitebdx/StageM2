@@ -29,10 +29,10 @@ The creation of the outline will be done by using [FISH-QUANT).
 | ![](image_tuto/parametre_CP.png "Example of parameters for Cell Profiler in FISH-QUANT")|
 
 Identifiers : 
-1. for images of Dapi : w3SPI-488
-2. for images of : w1SPI-642
-3. for nuclei : __mask__('nuclei',)
-4. for cell : __mask_resize__('nuclei',)
+1. for DAPI images : w3SPI-488
+2. for FISH images : w1SPI-642
+3. for nuclei segmentation : __mask__('nuclei',)
+4. for cell segmentation : __mask_resize__('nuclei',)
 
 ## Rename the outline.txt files
 When the outlines are done you need to rename the outline.txt file and change the line 4. 
@@ -41,5 +41,7 @@ When the outlines are done you need to rename the outline.txt file and change th
 |------------- |
 | ![](image_tuto/exemple_outline_file.png "Example of correct outline file")|
 
-You can use the [Txt change.ipynb](
+You can use the [Txt change.ipynb](https://github.com/raphaeluniversitebdx/StageM2/blob/main/segmentation_fixed_cells/Txt%20change.ipynb) rename the files. 
+
+
 
