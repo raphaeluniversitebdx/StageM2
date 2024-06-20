@@ -13,11 +13,14 @@ This is a tutorial to create outline.txt files usable in matlab.
    
 ## 2D Projection 
 First you need to realise a 2D projection of the image.
-This can be done by using ImageJ and this script.
+This can be done by using ImageJ and this [script](https://github.com/raphaeluniversitebdx/StageM2/blob/main/segmentation_fixed_cells/Z_project_all_file_mac).
+ 
 
 
 ## segmentation
 With the 2D projection, the segmentation will be done by using [fq-segmentation](https://github.com/fish-quant/fq-segmentation/).
+The notebook [segment-nuclei](https://github.com/fish-quant/fq-segmentation/blob/master/notebooks/segment-cells-nuclei.ipynb) or [segment-cells-nuclei](https://github.com/fish-quant/fq-segmentation/blob/master/notebooks/segment-cells-nuclei.ipynb) can be use depending on what you want to achieve. 
 
 ## Creation of the outline in matlab
-The creation of the outline will be done by using [FISH-QUANT)
+The creation of the outline will be done by using [FISH-QUANT).
+
