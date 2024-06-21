@@ -133,6 +133,18 @@ def crop_cells_v3(labels):
         #return None 
     return cropped 
 
+def split_image(img):
+    img=verify_array(img)
+    print("shape of the image :", img.shape)
+    y=img.shape[2]
+    x=img.shape[3]
+    split=int(y/2)
+    upper_half = img[:, :, :split, :]
+    lower_half = img[:, :, split:, :]
+
+    print("return splitted image of shape", upper_half.shape )
+
+    return upper_half, lower_half
 
 def crop_cells_with_background(img,labels, cellNumber):
     
@@ -148,7 +160,7 @@ def crop_cells_with_background(img,labels, cellNumber):
     max_x = np.max([np.max(np.where(label==cellNumber)[2]) for label in labels])
 
     #print(min_y,max_y,  min_x,max_x)
-    cropped_img = img[:, :, min_y:max_y+1, min_x:max_x+1]
+    cropped_img = img[:, :, min_y:max_y+1, min_x:max_x+1] #  for an hyperstack of shape t,z,y,x 
     cropped_mask = labels[:, :, min_y:max_y+1, min_x:max_x+1]
     return cropped_img, cropped_mask
 
