@@ -10,11 +10,12 @@ import sys
 import sys
 import os
 
-# get follow_cells import 
-chemin_du_repertoire_parent = os.path.abspath(os.path.join(os.path.dirname(__file__), '../segmentation'))
+# Ajoutez le répertoire parent au sys.path
+chemin_du_repertoire_parent = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if chemin_du_repertoire_parent not in sys.path:
     sys.path.append(chemin_du_repertoire_parent)
 
+# Maintenant, vous pouvez importer le module
 from follow_cells import *
 
 
