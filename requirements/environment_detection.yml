@@ -69,7 +69,7 @@ dependencies:
   - pure_eval=0.2.2
   - pycparser=2.21
   - pygments=2.15.1
-  - python=3.9.18
+  - python=3.10
   - python-dateutil=2.8.2
   - python-fastjsonschema=2.16.2
   - pyzmq=23.2.0
@@ -101,7 +101,7 @@ dependencies:
   - pip:
       - about-time==4.2.1
       - alabaster==0.7.16
-      - alive-progress==3.1.5
+      - alive-progress
       - annotated-types==0.6.0
       - app-model==0.2.4
       - appdirs==1.4.4
@@ -117,7 +117,7 @@ dependencies:
       - cloudpickle==3.0.0
       - contourpy==1.2.0
       - cycler==0.12.1
-      - dask==2024.2.0
+      - dask
       - docstring-parser==0.15
       - docutils==0.20.1
       - fasteners==0.19
@@ -138,14 +138,14 @@ dependencies:
       - in-n-out==0.1.9
       - joblib==1.3.2
       - kiwisolver==1.4.5
-      - kneed==0.8.5
+      - kneed
       - lazy-loader==0.3
       - llvmlite==0.42.0
       - locket==1.0.0
       - looseversion==1.3.0
       - magicgui==0.8.1
       - markdown-it-py==3.0.0
-      - matplotlib==3.8.2
+      - matplotlib
       - mdurl==0.1.2
       - mpmath==1.3.0
       - mrc==0.3.1
