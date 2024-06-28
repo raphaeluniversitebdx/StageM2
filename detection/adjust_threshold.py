@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+@author: rtranchot
+"""
+
+
 import os
 import napari
 import tifffile

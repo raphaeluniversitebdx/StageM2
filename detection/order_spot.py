@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+@author: rtranchot
+"""
+
+
 from alive_progress import alive_bar
 from datetime import datetime
 from copy import deepcopy 
@@ -25,6 +31,10 @@ def sort_spot_list(spot_list,mipSequenceCell,distance=2):
     The goal of this function is to sort spot which are on the side of a cell to improve the computing of the reference spot
     spot_list : numpy array corresponding to a numpy array of spots through the whole movie
     mipSequenceCell : 2D projection of the movie
+    distance : distance in pixel beetwen the cell and the background 
+    _____________________________________________________________
+    return a new spot list throughout the movie 
+
     '''
     
     res=[]
@@ -75,6 +85,8 @@ def order_clusters_frames(clustersFrames,mipSequenceCell,threshold ):
     clustersFrames : coordinate of the clusters throughout the movie
     mipSequenceCell : 2D projection of the movie
     threshold : a specific value below which the a specific value for a candidate clusters will be eliminated  
+    ___________________________________________________
+    return a new list of clusters frame 
     '''
     res = []
     with alive_bar(len(clustersFrames), title = "order cluster frame",force_tty=True) as bar :
@@ -124,6 +136,14 @@ def compare_array(array,array_list):
 def sort_clustersFrames(clustersFrames,mipSequenceCell,threshold,perc=1):
     '''
     This function sort a list of numpy array according to a threshold corresponding to the intensity of the mipSequenceCell's pixels 
+    ________________________________________________________
+    clustersFrames : list of clusters Frames throughout the movie should be of shape [z,y,x,n,i]
+    mipSequenceCell : a 2D movie of a cell
+    threshold : a threshold of intensity 
+    perc : a percentage of clusters that should be conserved
+    ________________________________________________________
+    return a list of sorted clustersFrames by intensity 
+
     '''
 
     clustersFrames_cp = deepcopy(clustersFrames)
@@ -184,11 +204,15 @@ def merge_clusters_frame(res,mipSequenceCell,diffxy,diffz,perc=0.5):
     '''
     This function compute coordinate of clusters Frame with the compatible neighboor to get a better quantification 
 
-
+    ______________________________________________________
     res : an array corresponding to a list of sorted clusters with the clusters[0] always corresponding to the most intense pixel 
-    mipSequenceCell : a 2D image of a cell
-    diffxy : a radius in pixel
-    perc : percentage of tolerance of intensity for perc=0.5 an the most intense pixel = 2000, the tolerance will be from a range of -1000 to 1000
+    mipSequenceCell : a 2D movie of a cell
+    diffxy, diffz : a radius in pixel for the 3 dimensions 
+    perc : percentage of tolerance of intensity for perc=0.5 an the most intense pixel = 2000, the tolerance will be from a range of 1000 to 2000
+    ____________________________________________________
+    return a list of merged clusters according to the coordinate and the intensities 
+    ___________________________________________________
+    exemple : b = merge_clusters_frame(a,mipSequenceCell,diffxy=5,diffz=1) 
     '''
 
     # prendre en compte 
@@ -251,6 +275,18 @@ def get_all_clusters(images,threshold,size):
     return res 
 
 def move_sorted_clustersFrames(liste, elem_to_move, new_position): 
+    '''
+    This function is useful to move manually a clusters in a list to choose the actual clusters before the computing of the neighbors 
+    _________________________________________________
+    liste : list of the clustersFrame at time t 
+    elem_to_move : np.array of the element to move 
+    new_position : position where the element to move should be at
+    _________________________________________________
+
+    return a list of the clusters frame in time t 
+    ________________________________________________
+    exemple : a[2] = move_sorted_clustersFrames(a[2], np.array(a[2][1]), 0) 
+    '''
     try : 
         current = liste.index(elem_to_move)
     except ValueError as e : 
@@ -276,6 +312,22 @@ def create_index(clustersFrames):
 
 
 def save_csv_file(homeFolder,nameKey,imsQ,cellNumber,selectedThreshold,alpha,beta,gamma,c):
+    '''
+    This function save information about clusters frame in a csv file.
+    The csv file a saved in a special folder created in function of the day and the name of the movie 
+    ___________________________________________________
+    homeFolder : the folder where the movie folder is 
+    nameKey : the movie folder which should have the same name as the movie file 
+    imsQ : the last number of the movie folder's name can be empty 
+    cellNumber : the number of the cells 
+    selectedThreshold : selected threshold for the detection of the spots and clusters 
+    alpha,beta,gamma : selected parameters 
+    c : clustersFrame list to save 
+    ________________________________________________
+    return nothing 
+
+
+    '''
     b = np.concatenate(c)
     entete = ['z','y','x','n_molecule','minute']
     date = datetime.today().strftime('%Y_%m_%d')
